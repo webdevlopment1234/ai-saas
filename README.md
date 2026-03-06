@@ -1,7 +1,7 @@
 # AI-SaaS - AI-Powered Software-as-a-Service Application
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![License](https://img.shields.io/badge/React.js-v18.2.0-blue.svg)](https://opensource.org/licenses/MIT)
+[![React.js](https://img.shields.io/badge/React.js-v18.2.0-blue.svg)](https://reactjs.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-v13.4.12-blueviolet.svg)](https://nextjs.org/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-API-yellow.svg)](https://openai.com/)
 [![Replicate](https://img.shields.io/badge/Replicate-v0.12.3-orange.svg)](https://replicate.ai/)
@@ -27,14 +27,15 @@ AI-SaaS is an advanced and adaptable Software-as-a-Service (SaaS) application th
 
 - **Stripe Integration**: AI-SaaS seamlessly incorporates Stripe for secure and efficient payment processing. Users can subscribe to premium plans and access additional AI services based on their subscription level.
 
-## Screenshots
-<img width="1470" alt="Screenshot 2023-07-30 at 11 33 59 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/017f21c8-a8d2-4b70-b21b-60c1d03a28e0">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 40 43 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/a232dd89-9a6b-4f6d-bc6b-99ec9281fc78">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 41 18 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/a8f04ec9-2a3b-407a-8f18-3c948d1fa592">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 41 53 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/028ab744-870c-42d5-aa5a-78fa19a6d334">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 42 23 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/46e095c6-b369-4eb2-9e1e-e219e1703565">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 42 38 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/18f5b2d2-25b0-4b41-ad5b-1c47301a3196">
-<img width="1470" alt="Screenshot 2023-07-30 at 11 42 50 AM" src="https://github.com/ayusshrathore/ai-saas/assets/61450246/1292a4f1-e101-4837-90bd-6018f8f61288">
+- **Authentication**: Secured with Clerk for seamless and robust user authentication.
+
+## Tech Stack
+- **Framework**: Next.js 13 (App Router)
+- **Styling**: Tailwind CSS, Lucide React, Radix UI
+- **Database**: Prisma with SQLite/Postgres
+- **AI Models**: OpenAI (GPT-3.5/4), Replicate (Music, Video)
+- **Payments**: Stripe
+- **Auth**: Clerk
 
 ## Getting Started
 
@@ -43,7 +44,7 @@ To run AI-SaaS locally, follow these steps:
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/ayusshrathore/ai-saas.git
+git clone https://github.com/webdevlopment1234/ai-saas.git
 cd ai-saas
 ```
 
@@ -51,33 +52,45 @@ cd ai-saas
 
 ```bash
 npm install
-# or
-yarn install
 ```
 
 3. **Configure environment variables**:
 
-To ensure proper functionality, set up environment variables for API keys and other sensitive information. Create a `.env` file in the root directory and populate it with the necessary variables. For reference, consult the `.env.example` file for the required variables.
+Create a `.env` file in the root directory and populate it with the necessary variables. Use `.env.example` as a template:
 
-4. **Run the application**:
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+
+OPENAI_API_KEY=
+REPLICATE_API_TOKEN=
+DATABASE_URL=
+STRIPE_API_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+4. **Setup Database**:
+
+```bash
+npx prisma db push
+```
+
+5. **Run the application**:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 The application should now be running locally at `http://localhost:3000`.
 
 ## Deployment
 
-AI-SaaS can be deployed to various hosting platforms that support Next.js applications. Before deployment, make sure you have configured the necessary environment variables for production.
-
-## Contributions
-
-Contributions to AI-SaaS are highly appreciated! If you encounter any bugs or have suggestions for new features, please feel free to open an issue or submit a pull request.
-
-When contributing, adhere to the existing code style and include comprehensive test cases for new features.
+AI-SaaS can be deployed to various hosting platforms that support Next.js applications (e.g., Vercel, Netlify). Before deployment, make sure you have configured the necessary environment variables for production.
 
 ## License
 
@@ -86,4 +99,3 @@ AI-SaaS is released under the [MIT License](https://opensource.org/licenses/MIT)
 ## Acknowledgments
 
 AI-SaaS is built with the invaluable support and integration of several open-source projects and technologies. I extend my gratitude to the developers and maintainers of Next.js, OpenAI, Replicate, Tailwind CSS, Prisma, and Stripe for their significant contributions to the development community.
-[![Netlify Status](https://api.netlify.com/api/v1/badges/6da7f929-c69e-4c0a-9fd6-596a41129274/deploy-status)](https://app.netlify.com/sites/superlative-malabi-796b55/deploys)
