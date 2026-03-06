@@ -40,8 +40,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(response, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.log("[VIDEO_ERROR]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new NextResponse("Video Generation Error: " + (error?.message || "Internal Server Error"), { status: 500 });
   }
 }

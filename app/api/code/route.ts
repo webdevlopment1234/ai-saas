@@ -2,15 +2,16 @@ import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
+  baseURL: process.env.GROQ_API_KEY ? "https://api.groq.com/openai/v1" : undefined,
 });
 
-const openAi = new OpenAIApi(configuration);
+const model_name = process.env.GROQ_API_KEY ? "llama-3.3-70b-versatile" : "gpt-4o-mini";
 
-const instructionMessage: ChatCompletionRequestMessage = {
+const instructionMessage: OpenAI.Chat.ChatCompletionSystemMessageParam = {
   role: "system",
   content: "You are a code generator. You must answer only in markdown code snippets. Use code comments for explanations.",
 };
@@ -25,8 +26,8 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!configuration) {
-      return new NextResponse("OpenAI API Key not configured", { status: 500 });
+    if (!process.env.OPENAI_API_KEY && !process.env.GROQ_API_KEY) {
+      return new NextResponse("AI API Key not configured", { status: 500 });
     }
 
     if (!messages) {
@@ -40,8 +41,8 @@ export async function POST(req: Request) {
       return new NextResponse("API Limit Exceeded", { status: 403 });
     }
 
-    const response = await openAi.createChatCompletion({
-      model: "gpt-3.5-turbo",
+    const response = await openai.chat.completions.create({
+      model: model_name,
       messages: [instructionMessage, ...messages],
     });
 
@@ -49,9 +50,11 @@ export async function POST(req: Request) {
       await increaseApiLimit();
     }
 
-    return NextResponse.json(response.data.choices[0].message, { status: 200 });
-  } catch (error) {
+    return NextResponse.json(response.choices[0].message, { status: 200 });
+  } catch (error: any) {
     console.log("[CODE_ERROR]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    const provider = process.env.GROQ_API_KEY ? "Groq" : "OpenAI";
+    const errorMessage = error?.response?.data?.error?.message || error?.message || `${provider} API Error`;
+    return new NextResponse(`${provider} Error: ` + errorMessage, { status: 500 });
   }
 }
