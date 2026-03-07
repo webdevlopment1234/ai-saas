@@ -6,11 +6,6 @@ import OpenAI from "openai";
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
 
-const openai = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
-  baseURL: process.env.GROQ_API_KEY ? "https://api.groq.com/openai/v1" : undefined,
-});
-
 const model_name = process.env.GROQ_API_KEY ? "llama-3.3-70b-versatile" : "gpt-4o-mini";
 
 export async function POST(req: Request) {
@@ -37,6 +32,11 @@ export async function POST(req: Request) {
     if (!isAllowed && !isPro) {
       return new NextResponse("API Limit Exceeded", { status: 403 });
     }
+
+    const openai = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
+      baseURL: process.env.GROQ_API_KEY ? "https://api.groq.com/openai/v1" : undefined,
+    });
 
     try {
       const response = await openai.chat.completions.create({

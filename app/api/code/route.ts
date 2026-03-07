@@ -5,11 +5,6 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
-  baseURL: process.env.GROQ_API_KEY ? "https://api.groq.com/openai/v1" : undefined,
-});
-
 const model_name = process.env.GROQ_API_KEY ? "llama-3.3-70b-versatile" : "gpt-4o-mini";
 
 const instructionMessage: OpenAI.Chat.ChatCompletionSystemMessageParam = {
@@ -41,6 +36,11 @@ export async function POST(req: Request) {
     if (!isAllowed && !isPro) {
       return new NextResponse("API Limit Exceeded", { status: 403 });
     }
+
+    const openai = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY,
+      baseURL: process.env.GROQ_API_KEY ? "https://api.groq.com/openai/v1" : undefined,
+    });
 
     const response = await openai.chat.completions.create({
       model: model_name,
